@@ -101,7 +101,7 @@ Install_Requires(){
     else
         INS="apt-get"
     fi
-    ${INS} update
+    ${INS} update -y
     ${INS} install -y curl wget nano unzip bc
 }
 
