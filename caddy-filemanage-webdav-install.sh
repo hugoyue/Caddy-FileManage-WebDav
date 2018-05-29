@@ -261,6 +261,9 @@ Caddy + FileManage + webdav  一键脚本
 
 Author zsnmwy
 
+仅仅在Debian9 x64 上面进行测试
+其他系统请自测
+
 ----------
 
 请确保域名A记录已正确解析至服务器IP
