@@ -87,7 +87,7 @@ Get_Information(){
 }
 
 Install_Requires(){
-    if [[ "${ID}" == "centos"]];
+    if [[ "${ID}" == "centos" ]];
     then
         INS="yum"
     else
