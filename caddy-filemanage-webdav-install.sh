@@ -95,7 +95,7 @@ Get_Information(){
 }
 
 Install_Requires(){
-    if [[ "${ID}" == "centos" ]];
+    if expr 0 + $(rpm -q centos-release|cut -d- -f3) > null;
     then
         INS="yum"
     else
