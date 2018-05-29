@@ -2,7 +2,11 @@
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin:/opt:/root/.nvm/versions/node/v8.11.1/bin
 export PATH
 
-#version=1.0
+#Author:zsnmwy
+#version:1.0
+#Github:https://github.com/zsnmwy/Caddy-FileManage-WebDav
+
+
 source /etc/os-release
 VERSION=$(echo ${VERSION} | awk -F "[()]" '{print $2}')
 
@@ -45,6 +49,10 @@ domain_check(){
         echo -e "${OK} ${GreenBG} 域名dns解析IP  与 本机IP 匹配 域名解析正确 ${Font}"
         sleep 2
     else
+        echo -e "${Error} ${RedBG} 域名dns解析IP 与 本机IP不一致，会造成Caddy在证书自动申请的时候失败"
+        echo -e "${Error} ${RedBG} 域名dns解析IP 与 本机IP不一致，会造成Caddy在证书自动申请的时候失败"
+        echo -e "${Error} ${RedBG} 域名dns解析IP 与 本机IP不一致，会造成Caddy在证书自动申请的时候失败"
+        echo -e "\n\n"
         echo -e "${Error} ${RedBG} 域名dns解析IP 与 本机IP 不匹配 是否继续安装？（y/n）${Font}" && read install
         case $install in
             [yY][eE][sS]|[yY])
