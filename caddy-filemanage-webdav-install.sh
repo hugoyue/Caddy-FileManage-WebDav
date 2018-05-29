@@ -5,7 +5,7 @@ export PATH
 #Author:zsnmwy
 #version:1.0
 #Github:https://github.com/zsnmwy/Caddy-FileManage-WebDav
-
+#Centos7 x64 Centos6 x64 Debian9 x64 Ubuntu16 x64
 
 source /etc/os-release
 VERSION=$(echo ${VERSION} | awk -F "[()]" '{print $2}')
@@ -257,7 +257,8 @@ General_Insatll(){
     Add_Caddyfile
     Install_nvm_node_V8.11.1_PM2
     Add_pm2_caddy_manage
-    if $(rpm -q centos-release|cut -d- -f3) -eq 6
+    centos_version=$(rpm -q centos-release | cut -d- -f3)
+    if [[ $centos_version -eq 6 ]]
     then
         echo -e "检测到centos6 跳过安装rinetdbbr"
     else
@@ -309,9 +310,9 @@ then
 else
     if [[ -z $(ps -e | grep caddy) ]] 
     then
-        echo "Caddy 状态 : 已安装 并 正在运行"
-    else
         echo "Caddy 状态 : 已安装 但 未运行"
+    else
+        echo "Caddy 状态 : 已安装 并 正在运行"
     fi
 fi
 read -p "请输入数字:" VAR
