@@ -28,6 +28,10 @@ Font="\033[0m"
 file_path="/opt/caddy"
 filemanager_database_path="/opt/caddy"
 
+check_installed_status(){
+	[[ ! -e ${file_path} ]] && echo -e "${Error_font_prefix}[错误]${Font_suffix} Caddy 没有安装，请检查 !" && exit 1
+}
+
 judge(){
     if [[ $? -eq 0 ]];then
         echo -e "${OK} ${GreenBG} $1 完成 ${Font}"
@@ -166,16 +170,19 @@ caddy
 }
 
 caddy_pm2_start(){
+    check_installed_status
     pm2 start ${file_path}/caddy.sh
     pm2 log caddy
 }
 
 caddy_pm2_restart(){
+    check_installed_status
     pm2 restart caddy
     pm2 log caddy
 }
 
 caddy_pm2_delete(){
+    check_installed_status
     pm2 delete caddy
 }
 
@@ -259,6 +266,7 @@ General_Insatll(){
     Add_Toyo_aria2_install
     ulimit -n 8192
     echo_message
+    bash
 }
 is_root
 echo "
@@ -295,6 +303,17 @@ A       webdav      server ip
 8.安装rclone
 9.退出
 "
+if [[ ! -e ${file_path} ]] 
+then
+    echo "Caddy 状态 : 未安装"
+else
+    if [[ -z ${ps -e | grep caddy} ]] 
+    then
+        echo "Caddy 状态 : 已安装 并 正在运行"
+    else
+        echo "Caddy 状态 : 已安装 但 未运行"
+    fi
+fi
 read -p "请输入数字:" VAR
 case $VAR in
     1)
