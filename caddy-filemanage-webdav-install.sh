@@ -250,7 +250,12 @@ General_Insatll(){
     Add_Caddyfile
     Install_nvm_node_V8.11.1_PM2
     Add_pm2_caddy_manage
-    rinetdbbr_install
+    if $(rpm -q centos-release|cut -d- -f3) -eq 6
+    then
+        echo -e "检测到centos6 跳过安装rinetdbbr"
+    else
+        rinetdbbr_install
+    fi
     Add_Toyo_aria2_install
     ulimit -n 8192
     echo_message
