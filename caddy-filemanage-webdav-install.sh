@@ -25,13 +25,13 @@ file_path="/opt/caddy"
 filemanager_database_path="/opt/caddy"
 
 judge(){
-	if [[ $? -eq 0 ]];then
-		echo -e "${OK} ${GreenBG} $1 完成 ${Font}"
-		sleep 1
-	else
-		echo -e "${Error} ${RedBG} $1 失败${Font}"
-		exit 1
-	fi
+    if [[ $? -eq 0 ]];then
+        echo -e "${OK} ${GreenBG} $1 完成 ${Font}"
+        sleep 1
+    else
+        echo -e "${Error} ${RedBG} $1 失败${Font}"
+        exit 1
+    fi
 }
 
 domain_check(){
@@ -129,20 +129,20 @@ webdav.${domain} {
 }
 
 Install_nvm_node_V8.11.1_PM2() {
-	${INS} update
-	${INS} install wget -y
-	echo -e "${Info} ${GreenBG} nvm安装阶段 ${Font}"
-	wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh | bash #This install 
+    ${INS} update
+    ${INS} install wget -y
+    echo -e "${Info} ${GreenBG} nvm安装阶段 ${Font}"
+    wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh | bash #This install
     judge "安装nvm"
-	export NVM_DIR="$HOME/.nvm"
-	[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"                   # This loads nvm
-	[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
-	echo -e "${Info} ${GreenBG} node安装阶段 ${Font}"
-	nvm install 8.11.1 # This install node v8.11.1
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"                   # This loads nvm
+    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
+    echo -e "${Info} ${GreenBG} node安装阶段 ${Font}"
+    nvm install 8.11.1 # This install node v8.11.1
     judge "安装node v8.11.1"
-	node -v            # Show node version
-	echo -e "${Info} ${GreenBG} pm2安装阶段 ${Font}"
-	npm i -g pm2 # This install pm2
+    node -v            # Show node version
+    echo -e "${Info} ${GreenBG} pm2安装阶段 ${Font}"
+    npm i -g pm2 # This install pm2
     judge "安装pm2"
 }
 
@@ -151,7 +151,7 @@ Add_pm2_caddy_manage(){
 #!/usr/bin/env bash
 cd ${file_path}
 caddy
-" > ${file_path}/caddy.sh
+    " > ${file_path}/caddy.sh
 }
 
 caddy_pm2_start(){
@@ -168,8 +168,6 @@ caddy_pm2_delete(){
     pm2 delete caddy
 }
 
-
-
 Add_Toyo_aria2_install(){
     cd ${file_path}
     wget -N --no-check-certificate https://raw.githubusercontent.com/ToyoDAdoubi/doubi/master/aria2.sh && chmod +x aria2.sh
@@ -182,19 +180,19 @@ Install_rclone(){
 }
 
 rinetdbbr_install(){
-	export RINET_URL="https://github.com/dylanbai8/V2Ray_ws-tls_Website_onekey/raw/master/bbr/rinetd_bbr_powered"
-	IFACE=$(ip -4 addr | awk '{if ($1 ~ /inet/ && $NF ~ /^[ve]/) {a=$NF}} END{print a}')
-
-	curl -L "${RINET_URL}" >/usr/bin/rinetd-bbr
-	chmod +x /usr/bin/rinetd-bbr
-	judge "rinetd-bbr 安装"
-
-	touch /etc/rinetd-bbr.conf
+    export RINET_URL="https://github.com/dylanbai8/V2Ray_ws-tls_Website_onekey/raw/master/bbr/rinetd_bbr_powered"
+    IFACE=$(ip -4 addr | awk '{if ($1 ~ /inet/ && $NF ~ /^[ve]/) {a=$NF}} END{print a}')
+    
+    curl -L "${RINET_URL}" >/usr/bin/rinetd-bbr
+    chmod +x /usr/bin/rinetd-bbr
+    judge "rinetd-bbr 安装"
+    
+    touch /etc/rinetd-bbr.conf
 	cat <<EOF >> /etc/rinetd-bbr.conf
 0.0.0.0 ${port} 0.0.0.0 ${port}
 EOF
-
-	touch /etc/systemd/system/rinetd-bbr.service
+    
+    touch /etc/systemd/system/rinetd-bbr.service
 	cat <<EOF > /etc/systemd/system/rinetd-bbr.service
 [Unit]
 Description=rinetd with bbr
@@ -205,21 +203,21 @@ User=root
 [Install]
 WantedBy=multi-user.target
 EOF
-	judge "rinetd-bbr 自启动配置"
-
-	systemctl enable rinetd-bbr >/dev/null 2>&1
-	systemctl start rinetd-bbr
-	judge "rinetd-bbr 启动"
+    judge "rinetd-bbr 自启动配置"
+    
+    systemctl enable rinetd-bbr >/dev/null 2>&1
+    systemctl start rinetd-bbr
+    judge "rinetd-bbr 启动"
 }
 
 is_root(){
-	if [ `id -u` == 0 ]
-		then echo -e "${OK} ${GreenBG} 当前用户是root用户 ${Font}"
-		sleep 3
-	else
-		echo -e "${Error} ${RedBG} 当前用户不是root用户，请切换到root用户后重新执行脚本 ${Font}"
-		exit 1
-	fi
+    if [ `id -u` == 0 ]
+    then echo -e "${OK} ${GreenBG} 当前用户是root用户 ${Font}"
+        sleep 3
+    else
+        echo -e "${Error} ${RedBG} 当前用户不是root用户，请切换到root用户后重新执行脚本 ${Font}"
+        exit 1
+    fi
 }
 General_Insatll(){
     is_root
@@ -251,34 +249,34 @@ Author zsnmwy
 6.安装Aria2
 7.安装rclone
 8.退出
-"
+    "
     case $VAR in
         1)
-        General_Insatll
+            General_Insatll
         ;;
         2)
-        caddy_pm2_start
+            caddy_pm2_start
         ;;
         3)
-        pm2 log caddy
+            pm2 log caddy
         ;;
         4)
-        caddy_pm2_restart
+            caddy_pm2_restart
         ;;
         5)
-        caddy_pm2_delete
+            caddy_pm2_delete
         ;;
         6)
-        bash ${file_path}/aria2.sh
+            bash ${file_path}/aria2.sh
         ;;
         7)
-        Install_rclone
+            Install_rclone
         ;;
         8)
-        exit
+            exit
         ;;
         *)
-        start
+            start
         ;;
     esac
     
