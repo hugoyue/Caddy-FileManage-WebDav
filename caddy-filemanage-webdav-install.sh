@@ -59,7 +59,7 @@ domain_check(){
     fi
 }
 
-Get_Information{
+Get_Information(){
     echo -e "${Info} ${GreenBG} 请输入你的域名信息(如:bing.com 不要前面的www.)，请确保域名A记录已正确解析至服务器IP ${Font}"
     stty erase '^H' && read -p "请输入：" domain
     domain_check
