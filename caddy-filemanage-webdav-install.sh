@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin:/opt
+PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin:/opt:/root/.nvm/versions/node/v8.11.1/bin
 export PATH
 
 #version=1.0
@@ -82,8 +82,8 @@ Get_Information(){
     echo -e "${Info} ${GreenBG} Webdav的管理目录：${webdav_path} ${Font}"
     echo -e "${Info} ${GreenBG} FileManager的管理目录：${filemanager_file_path} ${Font}"
     echo -e "----------------------------------------------------------"
-    echo -e "\n\n回车继续 信息不对按 Ctrl+C 终止"
-    pause
+    echo -e "\n\n信息不对按 Ctrl+C 终止"
+    read -n1 -p "Press any key to continue..."
 }
 
 Install_Requires(){
@@ -94,7 +94,7 @@ Install_Requires(){
         INS="apt-get"
     fi
     ${INS} update
-    ${INS} install -y bash mv rm tr type curl wget base64 nano sudo tar unzip gpg
+    ${INS} install -y curl wget nano unzip bc
 }
 
 
@@ -107,8 +107,9 @@ Install_Caddy(){
 
 Add_Caddyfile(){
     mkdir -p ${file_path}
+    judge "创建 ${file_path} 目录"
     echo "
- ${domain} {
+${domain} {
     timeouts none
     tls ${email}
     gzip
@@ -126,6 +127,7 @@ webdav.${domain} {
     }
 }
     " > ${file_path}/Caddyfile
+    judge "写入Caddy的配置文件"
 }
 
 Install_nvm_node_V8.11.1_PM2() {
@@ -152,6 +154,7 @@ Add_pm2_caddy_manage(){
 cd ${file_path}
 caddy
     " > ${file_path}/caddy.sh
+    judge "添加caddy启动脚本"
 }
 
 caddy_pm2_start(){
@@ -213,72 +216,101 @@ EOF
 is_root(){
     if [ `id -u` == 0 ]
     then echo -e "${OK} ${GreenBG} 当前用户是root用户 ${Font}"
-        sleep 3
     else
         echo -e "${Error} ${RedBG} 当前用户不是root用户，请切换到root用户后重新执行脚本 ${Font}"
         exit 1
     fi
 }
+
+echo_message(){
+    echo -e "\n\n"
+    echo -e "${Info} ${GreenBG} WebDav 访问地址：https://webdav.${domain} ${Font}"
+    echo -e "${Info} ${GreenBG} WebDav用户名：${webdav_account} ${Font}"
+    echo -e "${Info} ${GreenBG} WebDav密码：${webdav_password} ${Font}"
+    echo -e "${Info} ${GreenBG} Webdav的管理目录：${webdav_path} ${Font}"
+    echo -e "\n\n"
+    echo -e "${Info} ${GreenBG} FileManager 访问地址：https://${domain} ${Font}"
+    echo -e "${Info} ${GreenBG} FileManager的管理目录：${filemanager_file_path} ${Font}"
+    echo -e "${Info} ${GreenBG} FileManager的默认用户和密码都是 admin ${Font}"
+}
+
 General_Insatll(){
     is_root
-    Get_Information
     Install_Requires
+    Get_Information
     Install_Caddy
     Add_Caddyfile
     Install_nvm_node_V8.11.1_PM2
     Add_pm2_caddy_manage
     rinetdbbr_install
     Add_Toyo_aria2_install
+    ulimit -n 8192
+    echo_message
 }
-
-
-start(){
-    echo "
+is_root
+echo "
 Caddy + FileManage + webdav  一键脚本
 
 Author zsnmwy
 
+----------
+
+请确保域名A记录已正确解析至服务器IP
+
+Type    Name        Value
+A       @           server ip
+A       www         server ip
+A       webdav      server ip
+
+最后一个别忘了，webdav
+到时候webdav的访问地址为 https://webdav.xxxxx.xxx
+
+----------
 
 1.安装
+2.SSL证书自动申请有更改，请先选此选项。启动Caddy
 ############# PM2 ############
-2.启动Caddy
-3.查看Caddy日志
-4.重启Caddy
-5.删除Caddy
+3.启动Caddy
+4.查看Caddy日志
+5.重启Caddy
+6.删除Caddy
 ############# PM2 ############
-6.安装Aria2
-7.安装rclone
-8.退出
-    "
-    case $VAR in
-        1)
-            General_Insatll
-        ;;
-        2)
-            caddy_pm2_start
-        ;;
-        3)
-            pm2 log caddy
-        ;;
-        4)
-            caddy_pm2_restart
-        ;;
-        5)
-            caddy_pm2_delete
-        ;;
-        6)
-            bash ${file_path}/aria2.sh
-        ;;
-        7)
-            Install_rclone
-        ;;
-        8)
-            exit
-        ;;
-        *)
-            start
-        ;;
-    esac
-    
-}
-start
+7.Aria2 一键安装管理脚本 Toyo
+8.安装rclone
+9.退出
+"
+read -p "请输入数字:" VAR
+case $VAR in
+    1)
+        General_Insatll
+    ;;
+    2)
+        cd ${file_path}
+        caddy
+    ;;
+    3)
+        caddy_pm2_start
+    ;;
+    4)
+        pm2 log caddy
+    ;;
+    5)
+        caddy_pm2_restart
+    ;;
+    6)
+        caddy_pm2_delete
+    ;;
+    7)
+        bash ${file_path}/aria2.sh
+    ;;
+    8)
+        Install_rclone
+    ;;
+    9)
+        exit
+    ;;
+    *)
+        echo "请输入数字"
+        exit
+    ;;
+esac
