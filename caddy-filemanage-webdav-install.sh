@@ -95,7 +95,7 @@ Get_Information(){
 }
 
 Install_Requires(){
-    if expr 0 + $(rpm -q centos-release|cut -d- -f3) > null;
+    if expr 0 + $(rpm -q centos-release|cut -d- -f3) >/dev/null 2>&1;
     then
         INS="yum"
     else
