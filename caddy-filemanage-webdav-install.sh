@@ -307,7 +307,7 @@ if [[ ! -e ${file_path} ]]
 then
     echo "Caddy 状态 : 未安装"
 else
-    if [[ -z ${ps -e | grep caddy} ]] 
+    if [[ -z $(ps -e | grep caddy) ]] 
     then
         echo "Caddy 状态 : 已安装 并 正在运行"
     else
